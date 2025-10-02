@@ -46,8 +46,7 @@ const createSubscriberService = async (Email: string) => {
       const email = Email;
       const subscriberDetails = { id: nanoid(), email: email };
       const subscriber = await subscriberToDatabase(subscriberDetails);
-      if (subscriber.length < 0)
-        return { error: "Couldnt Subscribe. Try Again" };
+      if (subscriber.length < 0) return { error: "Sorry Please Try Again" };
       const receiverEmail = subscriberDetails.email;
       await sendMail(
         receiverEmail,

@@ -35,19 +35,19 @@ export async function PUT(req: Request, { params }: ParamsInterface) {
       jobcategory,
     }: Update = await req.json();
     const details = {
-      id,
-      overview,
-      salary,
-      featured,
-      company,
-      website,
-      duration,
-      position,
-      location,
-      post,
-      jobcategory,
+      id: id,
+      overview: overview,
+      salary: salary,
+      featured: featured,
+      company: company,
+      website: website,
+      duration: duration,
+      position: position,
+      location: location,
+      post: post,
+      jobcategory: jobcategory,
     };
-    const job = await updateJobService(details);
+    const job = await jobToDatabase(details);
     return NextResponse.json({ status: 201, message: "Success", job });
   } catch (error: unknown) {
     console.error("UPDATE job/update/id", error);
@@ -57,29 +57,6 @@ export async function PUT(req: Request, { params }: ParamsInterface) {
     );
   }
 }
-
-const updateJobService = async (details: Update) => {
-  try {
-    const content = {
-      id: details.id,
-      overview: details.overview,
-      salary: details.salary,
-      featured: details.featured,
-      company: details.company,
-      website: details.website,
-      duration: details.duration,
-      position: details.position,
-      location: details.location,
-      post: details.post,
-      jobcategory: details.jobcategory,
-    };
-    const job = await jobToDatabase(content);
-    return job;
-  } catch (error: unknown) {
-    console.error("SERVICE job/update/id", error);
-    throw error;
-  }
-};
 
 const jobToDatabase = async (content: Update) => {
   try {

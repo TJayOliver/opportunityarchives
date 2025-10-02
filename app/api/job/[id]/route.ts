@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { scholarshipModel } from "@/schema/mongoSchema";
+import { jobModel } from "@/schema/mongoSchema";
 import { connectMongoDB } from "@/lib/mongodb";
 
 interface ParamsInterface {
@@ -10,10 +10,10 @@ export async function GET(req: Request, { params }: ParamsInterface) {
   try {
     await connectMongoDB();
     const { id } = await params;
-    const scholarship = await retrieveFromDatabase(id);
-    return NextResponse.json({ status: 201, data: scholarship });
+    const job = await retrieveFromDatabase(id);
+    return NextResponse.json({ status: 201, data: [job] });
   } catch (error: unknown) {
-    console.error("GET scholarship/read/id", error);
+    console.error("GET job/id", error);
     return NextResponse.json({
       status: 500,
       message: "Internal Server Error",
@@ -23,9 +23,9 @@ export async function GET(req: Request, { params }: ParamsInterface) {
 
 const retrieveFromDatabase = async (id: string) => {
   try {
-    const scholarship = await scholarshipModel.findOne({ id: id });
-    return scholarship;
-  } catch (error) {
+    const job = await jobModel.findOne({ id: id });
+    return job;
+  } catch (error: unknown) {
     throw error;
   }
 };

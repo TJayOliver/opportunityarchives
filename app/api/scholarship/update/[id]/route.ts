@@ -26,20 +26,20 @@ export async function PUT(req: Request, { params }: ParamsInterface) {
       author,
     }: Update = await req.json();
     const details = {
-      id,
-      scholarshipname,
-      deadline,
-      description,
-      post,
-      featured,
-      scholarshiptype,
-      programs,
-      website,
-      scholarshipcategory,
-      country,
-      author,
+      id: id,
+      scholarshipname: scholarshipname,
+      deadline: deadline,
+      description: description,
+      post: post,
+      featured: featured,
+      scholarshiptype: scholarshiptype,
+      programs: programs,
+      website: website,
+      scholarshipcategory: scholarshipcategory,
+      country: country,
+      author: author,
     };
-    const scholarship = await updatescholarshipService(details);
+    const scholarship = await scholarshipToDatabase(details);
     return NextResponse.json({ status: 201, message: "Success", scholarship });
   } catch (error: unknown) {
     console.error("UPDATE scholarship/update/id", error);
@@ -49,30 +49,6 @@ export async function PUT(req: Request, { params }: ParamsInterface) {
     );
   }
 }
-
-const updatescholarshipService = async (details: ScholarshipInterface) => {
-  try {
-    const content = {
-      id: details.id,
-      scholarshipname: details.scholarshipname,
-      deadline: details.deadline,
-      description: details.description,
-      post: details.post,
-      featured: details.featured,
-      scholarshiptype: details.scholarshiptype,
-      programs: details.programs,
-      website: details.website,
-      scholarshipcategory: details.scholarshipcategory,
-      country: details.country,
-      author: details.author,
-    };
-    const scholarship = await scholarshipToDatabase(content);
-    return scholarship;
-  } catch (error: unknown) {
-    console.error("SERVICE scholarship/update/id", error);
-    throw error;
-  }
-};
 
 const scholarshipToDatabase = async (content: ScholarshipInterface) => {
   try {

@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { scholarshipModel } from "@/schema/mongoSchema";
+import { categoryModel } from "@/schema/mongoSchema";
 import { connectMongoDB } from "@/lib/mongodb";
 
 export async function GET(req: Request) {
   try {
     await connectMongoDB();
-    const scholarship = await retrieveFromDatabase();
-    return NextResponse.json({ status: 201, data: scholarship });
+    const category = await retrieveFromDatabase();
+    return NextResponse.json({ status: 201, data: category });
   } catch (error: unknown) {
-    console.error("GET scholarship/read", error);
+    console.error("GET category/count", error);
     return NextResponse.json({
       status: 500,
       message: "Internal Server Error",
@@ -18,8 +18,8 @@ export async function GET(req: Request) {
 
 const retrieveFromDatabase = async () => {
   try {
-    const scholarship = await scholarshipModel.find().sort({ datecreated: -1 });
-    return scholarship;
+    const category = await categoryModel.find().sort({ categoryname: 1 });
+    return category;
   } catch (error: unknown) {
     throw error;
   }
