@@ -7,9 +7,9 @@ export async function DELETE(req: Request) {
     await connectMongoDB();
     const { email } = await req.json();
     await unsubscribeFromDatabase(email);
-    return NextResponse.json({ status: 201, message: "Success" });
+    return NextResponse.json({ status: 200, message: "Success" });
   } catch (error: unknown) {
-    console.error("DELETE subscriber/unsubscribe", error);
+    console.error("DELETE /unsubscribe", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

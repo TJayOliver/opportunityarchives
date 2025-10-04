@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     await connectMongoDB();
     const { filter } = await req.json();
     const scholarship = await retrieveFromDatabase(filter);
-    return NextResponse.json({ status: 201, data: scholarship });
+    return NextResponse.json({ status: 200, data: scholarship });
   } catch (error: unknown) {
     console.error("POST scholarship/search/entity", error);
     return NextResponse.json({

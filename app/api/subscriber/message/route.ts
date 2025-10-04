@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   try {
     await connectMongoDB();
     const message = await retrieveMessage();
-    return NextResponse.json({ status: 201, data: message });
+    return NextResponse.json({ status: 200, data: message });
   } catch (error: unknown) {
     console.error("GET subscriber/message", error);
     return NextResponse.json(

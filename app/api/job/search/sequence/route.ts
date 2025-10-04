@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { jobModel } from "@/schema/mongoSchema";
+import { connectMongoDB } from "@/lib/mongodb";
 
 export async function POST(req: Request) {
   try {
+    await connectMongoDB();
     const { filter } = await req.json();
     const job = await retrieveFromDatabase(filter);
     return NextResponse.json({ status: 201, data: job });

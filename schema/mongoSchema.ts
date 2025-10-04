@@ -561,6 +561,7 @@ const scholarshipSchema = new Schema<ScholarshipInterface>({
       "Zimbabwe",
     ],
   },
+  featured: { type: Boolean, required: true },
   website: { type: String, required: true },
   post: { type: String, required: true },
   author: { type: String, required: true },

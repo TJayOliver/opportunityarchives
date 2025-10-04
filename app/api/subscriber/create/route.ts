@@ -26,8 +26,8 @@ export async function POST(req: Request) {
     const Email: string = body.email;
     const subscriber = await createSubscriberService(Email);
     if (subscriber.error)
-      return NextResponse.json({ status: 404, message: subscriber.error });
-    return NextResponse.json({ status: 201, message: "Success" });
+      return NextResponse.json({ status: 200, message: subscriber.error });
+    return NextResponse.json({ status: 200, message: "Success" });
   } catch (error: unknown) {
     console.error("POST subscriber/create", error);
     return NextResponse.json(
@@ -50,258 +50,74 @@ const createSubscriberService = async (Email: string) => {
       const receiverEmail = subscriberDetails.email;
       await sendMail(
         receiverEmail,
-        "Empowering Your Journey: Exclusive Job Opportunities, Scholarships, and Career Guidance Await You!",
+        "Empowering Your Journey: Exclusive Job Opportunities and Scholarships Await You!",
         `<!DOCTYPE html>
-              <html lang="en">
-                <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                  <title>Future Forte</title>
-                </head>
-                <style>
-                  @import url("https://fonts.googleapis.com/css2?family=Inter:wgh@100..900&display=swap");
-                  @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-              
-                  * {
-                    padding: 0;
-                    margin: 0;
-                  }
-              
-                  body {
-                    background-color: white;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    font-family: "Inter", sans-serif;
-                    font-optical-sizing: auto;
-                    font-weight: 500;
-                    font-style: normal;
-                    font-variation-settings: "slnt" 0;
-                  }
-              
-                  main {
-                    height: 100vh;
-                  }
-              
-                  .footer {
-                    background-color: black;
-                    height: 200px;
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 30px;
-                    width: 100%;
-                    max-width: 50%;
-                  }
-              
-                  .socials {
-                    display: flex;
-                    gap: 25px;
-                  }
-              
-                  .job,
-                  .scholarship,
-                  .career {
-                    height: 200px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-                    align-items: center;
-                    padding: 10px;
-                  }
-              
-                  .job a,
-                  .scholarship a,
-                  .career a {
-                    background-color: rgb(253, 253, 253);
-                    padding: 8px;
-                    border-radius: 8px;
-                    text-decoration: none;
-                    color: black;
-                    display: flex;
-                    width: 200px;
-                  }
-              
-                  .job,
-                  .career {
-                    background-color: white;
-                  }
-              
-                  .text {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                  }
-              
-                  .header {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: #153448;
-                    padding: 15px;
-                  }
-              
-                  .header h1 {
-                    font-size: 25px;
-                    font-family: "Bebas Neue", sans-serif;
-                    font-weight: 400;
-                    font-style: normal;
-                    color: white;
-                  }
-              
-                  @media only screen and (max-width: 480px) {
-                    .job,
-                    .scholarship,
-                    .career {
-                      width: full;
-                      display: flex;
-                      flex-wrap: wrap;
-                      padding: 10px;
-                      justify-content: space-around;
-                      align-items: center;
-                    }
-              
-                    .header h1 {
-                      font-size: 5px;
-                    }
-              
-                    .main {
-                      display: flex;
-                      gap: 50px;
-                    }
-              
-                    .site-name {
-                      font-size: 25px;
-                    }
-              
-                    .job a,
-                    .scholarship a,
-                    .career a {
-                      width: 200px;
-                    }
-              
-                    .footer {
-                      height: 200px;
-                    }
-                  }
-              
-                  @media only screen and (max-width: 768px) {
-                    .job,
-                    .scholarship,
-                    .career {
-                      width: full;
-                      display: flex;
-                      flex-wrap: wrap;
-                      padding: 10px;
-                      justify-content: space-around;
-                      align-items: center;
-                    }
-              
-                    .header h1 {
-                      font-size: 20px;
-                    }
-              
-                    .image {
-                      height: 230px;
-                    }
-              
-                    .main {
-                      display: flex;
-                      gap: 50px;
-                    }
-              
-                    .image {
-                      width: 100%;
-                    }
-                  }
-                </style>
-              
-                <body>
-                  <main>
-                    <header class="header">
-                      <h1 class="site-name">FUTURE FORTE</h1>
-                    </header>
-                    <!-- job opport -->
-                    <section class="job">
-                      <div class="text">
-                        <h2>
-                          Find the latest <br />
-                          Job Opportunities
-                        </h2>
-                        <small
-                          >Get ready to elevate your career with our curated list of job
-                          openings that match your skills and interests.</small
-                        >
-                        <a
-                          href="${CLIENT_URL}/job"
-                          style="background-color: #153448; font-weight: 500; color: white"
-                          >Search</a
-                        >
+      <html lang="en" style="margin:0; padding:0;">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Opportunity Archives</title>
+          <!-- Google Font -->
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+        </head>
+        <body style="margin:0; padding:0; background-color:#f8fafc; font-family:'Inter', Arial, sans-serif; color:#1e293b;">
+
+          <!-- Main Container -->
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td align="center" style="padding:20px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 8px rgba(0,0,0,0.05);">
+                  
+                  <!-- Header -->
+                  <tr>
+                    <td align="center" style="background:#0f172a; padding:30px;">
+                      <h1 style="margin:0; font-size:24px; color:#ffffff; font-weight:700;">Opportunity Archives</h1>
+                    </td>
+                  </tr>
+
+                  <!-- Job Search Section -->
+                  <tr>
+                    <td style="padding:30px; border-bottom:1px solid #e2e8f0;">
+                      <h2 style="font-size:20px; margin:0 0 12px; font-weight:600; color:#0f172a;">🔍 Job Search</h2>
+                      <p style="margin:0; font-size:16px; color:#475569; line-height:1.6;">
+                        Explore the latest job opportunities carefully curated for you. Click below to start your job hunt and find the right career path.
+                      </p>
+                      <div style="margin-top:16px;">
+                        <a href="${CLIENT_URL}/jobs" style="background:#2563eb; color:#ffffff; text-decoration:none; padding:12px 20px; border-radius:8px; font-weight:600; display:inline-block;">Browse Jobs</a>
                       </div>
-                    </section>
-              
-                    <!-- scholarship opport -->
-                    <section
-                      class="scholarship"
-                      style="background-color: #153448; color: white"
-                    >
-                      <div class="text">
-                        <h2 style="color:white">Find the latest <br />Scholarship Opportunities</h2>
-                        <small
-                          >Explore our selected scholarships that can help alleviate the
-                          financial burden of your academic pursuit</small
-                        >
-                        <a
-                          href="${CLIENT_URL}/job"
-                          style="background-color: white; font-weight: 500; color: black"
-                          >Search</a
-                        >
+                    </td>
+                  </tr>
+
+                  <!-- Scholarship Section -->
+                  <tr>
+                    <td style="padding:30px;">
+                      <h2 style="font-size:20px; margin:0 0 12px; font-weight:600; color:#0f172a;">🎓 Scholarship Search</h2>
+                      <p style="margin:0; font-size:16px; color:#475569; line-height:1.6;">
+                        Discover scholarships tailored to your academic journey. Take the next step towards achieving your educational dreams.
+                      </p>
+                      <div style="margin-top:16px;">
+                        <a href="${CLIENT_URL}/scholarships" style="background:#10b981; color:#ffffff; text-decoration:none; padding:12px 20px; border-radius:8px; font-weight:600; display:inline-block;">Find Scholarships</a>
                       </div>
-                    </section>
-              
-                    <!-- career opport -->
-                    <section class="career">
-                      <div class="text">
-                        <h2 style="color: black">
-                          Read Inspiring <br />
-                          Career Guidance Articles
-                        </h2>
-                        <small style="color: black"
-                          >Explore resources that are designed to provide insights and expert
-                          advice to help you make decisions</small
-                        >
-                        <a
-                          href="${CLIENT_URL}/job"
-                          style="background-color: #153448; font-weight: 500; color: white"
-                          >Search</a
-                        >
-                      </div>
-                    </section>
-              
-                    <section
-                      style="
-                        background-color: #153448;
-                        color: white;
-                        padding: 14px;
-                        height: 200px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    >
-                      <a
-                        href="${CLIENT_URL}/unsubscribe"
-                        style="color: white; text-align: center"
-                        >Click to Unsubscribe</a
-                      >
-                    </section>
-                  </main>
-                </body>
-              </html>`
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td align="center" style="padding:20px; background:#f1f5f9; font-size:14px; color:#64748b;">
+                      <p style="margin:0;">You are receiving this email because you subscribed to <strong>Opportunity Archives</strong>.</p>
+                      <p style="margin:10px 0 0;">
+                        <a href="${CLIENT_URL}/unsubscribe" style="color:#ef4444; text-decoration:none; font-weight:600;">Unsubscribe</a>
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>
+      `
       );
       return subscriber;
     }

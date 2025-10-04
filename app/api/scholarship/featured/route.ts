@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { scholarshipModel } from "@/schema/mongoSchema";
+import { ScholarshipInterface, scholarshipModel } from "@/schema/mongoSchema";
 import { connectMongoDB } from "@/lib/mongodb";
 
 export async function GET(req: Request) {
   try {
     await connectMongoDB();
     const scholarship = await retrieveFromDatabase(true);
-    return NextResponse.json({ status: 201, data: scholarship });
+    return NextResponse.json({ status: 200, data: scholarship });
   } catch (error: unknown) {
     console.error("GET scholarship/featured", error);
     return NextResponse.json({
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   }
 }
 
-const retrieveFromDatabase = async (value: boolean) => {
+export const retrieveFromDatabase = async (value: boolean) => {
   try {
     const scholarship = await scholarshipModel
       .find({ featured: value })

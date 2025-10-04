@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   }
 }
 
-const retrieveFromDatabase = async (value: boolean) => {
+export const retrieveFromDatabase = async (value: boolean) => {
   try {
     const job = await jobModel
       .find({ featured: value })

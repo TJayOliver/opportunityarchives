@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { jobModel } from "@/schema/mongoSchema";
+import { connectMongoDB } from "@/lib/mongodb";
 
 interface ParamsInterface {
   params: Promise<{ id: string }>;
@@ -21,6 +22,7 @@ type Update = {
 
 export async function PUT(req: Request, { params }: ParamsInterface) {
   try {
+    await connectMongoDB();
     const { id } = await params;
     const {
       overview,
