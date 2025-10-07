@@ -29,13 +29,13 @@ export const storeToFirebase = async (image: File) => {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const imageName = nanoid(8) + file.name;
+    const imageName = nanoid(5) + file.name;
     const storage = ref(firebaseStorage);
     const fileRef = ref(storage, imageName);
     await uploadBytes(fileRef, buffer);
     const imageURL = await getDownloadURL(fileRef);
     return { imageURL, imageName };
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof Error) return { error: error.message };
   }
 };
