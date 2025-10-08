@@ -1,6 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
-export interface EmailInterface {
+export interface AllowedEmailInterface {
   email: string;
 }
 
@@ -84,7 +84,7 @@ export interface SubscriberInterface {
   email: string;
 }
 
-const emailSchema = new Schema<EmailInterface>({
+const allowedEmailsSchema = new Schema<AllowedEmailInterface>({
   email: { type: String, required: true, unique: true },
 });
 
@@ -372,7 +372,9 @@ const subscribersSchema = new Schema<SubscriberInterface>({
   email: { type: String, required: true, lowercase: true },
 });
 
-const emailModel = models.Email || model<EmailInterface>("Email", emailSchema);
+const allowedEmailModel =
+  models.AllowedEmail ||
+  model<AllowedEmailInterface>("AllowedEmail", allowedEmailsSchema);
 
 const adminModel =
   models.Administrator ||
@@ -396,7 +398,7 @@ const subscribersModel =
   model<SubscriberInterface>("Subscriber", subscribersSchema);
 
 export {
-  emailModel,
+  allowedEmailModel,
   adminModel,
   categoryModel,
   jobModel,

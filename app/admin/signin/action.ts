@@ -1,27 +1,38 @@
+"use server";
 import { connectMongoDB } from "@/lib/mongodb";
-import { emailModel } from "@/schema/mongoSchema";
+import { sendValidationCode } from "@/lib/sendMail";
+import { allowedEmailModel } from "@/schema/mongoSchema";
+import { nanoid } from "nanoid";
 
-export async function signIn(
-  prevState: { email: string; error: string },
+interface signInInterface {
+  email: string;
+  error: string;
+  access: boolean;
+}
+export const signIn = async (
+  prevState: signInInterface | undefined,
   formData: FormData
-) {
+): Promise<signInInterface | undefined> => {
   try {
     await connectMongoDB();
     const email = formData.get("email") as string;
     const checkValidity = await checkEmailExistence(email);
     if (checkValidity) {
-      return { email: "", error: "" };
+      const code = nanoid(8);
+      const sendCode = await sendValidationCode(email, code);
+      return { email, error: "", access: true };
     } else {
-      return { email: email, error: "Not a Valid Email Address" };
+      return { email, error: "Access Denied", access: false };
     }
   } catch (error: unknown) {
-    return { email: "", error: "Internal Server Error" };
+    console.error("sign in", error);
+    return { email: "", error: "Internal Server Error", access: false };
   }
-}
+};
 
 const checkEmailExistence = async (Email: string) => {
   try {
-    const email = await emailModel.findOne({ email: Email });
+    const email = await allowedEmailModel.findOne({ email: Email });
     return email;
   } catch (error) {
     throw error;

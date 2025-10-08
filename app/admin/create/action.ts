@@ -1,10 +1,14 @@
 "use server";
-import { adminModel, AdministratorInterface } from "@/schema/mongoSchema";
+import {
+  adminModel,
+  AdministratorInterface,
+  allowedEmailModel,
+} from "@/schema/mongoSchema";
 import { connectMongoDB } from "@/lib/mongodb";
 import { nanoid } from "nanoid";
 import { storeToFirebase } from "@/lib/firebase";
 
-interface signUp {
+interface createAdminInterface {
   username: string;
   email: string;
   error: string;
@@ -13,9 +17,9 @@ interface signUp {
 const emails = ["tjoliver1@yahoo.com", "tjayoliver99@gmail.com"];
 
 export const createAdmin = async (
-  prevState: signUp | undefined,
+  prevState: createAdminInterface | undefined,
   formData: FormData
-): Promise<signUp | undefined> => {
+): Promise<createAdminInterface | undefined> => {
   try {
     await connectMongoDB();
 
@@ -27,8 +31,9 @@ export const createAdmin = async (
     const imagename = firebase?.imageName;
     const image = firebase?.imageURL;
 
-    if (!emails.includes(email)) {
-      return { username, email, error: "Email not valid" };
+    const checkValidity = await checkEmailExistence(email);
+    if (!checkValidity) {
+      return { username, email, error: "Access Denied" };
     }
 
     const details: AdministratorInterface = {
@@ -43,6 +48,15 @@ export const createAdmin = async (
   } catch (error: unknown) {
     console.error("Create Admin", error);
     return { username: "", email: "", error: "Internal Server Error" };
+  }
+};
+
+const checkEmailExistence = async (Email: string) => {
+  try {
+    const email = await allowedEmailModel.findOne({ email: Email });
+    return email;
+  } catch (error) {
+    throw error;
   }
 };
 

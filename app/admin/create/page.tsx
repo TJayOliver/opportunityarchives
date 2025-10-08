@@ -23,7 +23,7 @@ const Administrator = () => {
           className="flex flex-col items-center  text-sm text-slate-800 placeholder:text-slate-500"
         >
           {state?.error && (
-            <div className="flex items-center mt-2 mb-4 h-10 pl-3 border border-slate-300 rounded-full focus-within:ring-2 focus-within:ring-indigo-400 transition-all overflow-hidden bg-gray-200 w-2/5 text-center font-medium justify-center text-red-600">
+            <div className="flex items-center mt-2 mb-4 h-10 pl-3 border border-slate-300 rounded-full focus-within:ring-2 focus-within:ring-indigo-400 transition-all overflow-hidden bg-gray-200 w-auto text-center font-medium justify-center text-red-600">
               <p>{state.error}</p>
             </div>
           )}

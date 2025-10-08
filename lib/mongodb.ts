@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 import { checkEnvExistence } from "./helpers";
 
-const MONGO_URI: string = process.env.MONGO_URI!;
-
-// if (!MONGO_URI) {
-//   throw new Error("MONGO_URI environment variable not found");
-// }
+const MONGO_URI: string = checkEnvExistence("MONGO_URI");
 
 let cached = (global as any).mongoose;
 
