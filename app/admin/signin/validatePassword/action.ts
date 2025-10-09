@@ -1,6 +1,12 @@
 "use server";
 import { connectMongoDB } from "@/lib/mongodb";
-import { allowedEmailModel } from "@/schema/mongoSchema";
+import { createSession } from "@/lib/session";
+import {
+  allowedEmailModel,
+  verificationCodeModel,
+  adminModel,
+} from "@/schema/mongoSchema";
+import { redirect } from "next/navigation";
 
 interface ValidatePasswordInterface {
   code: string;
@@ -13,9 +19,12 @@ export const validatePassword = async (
   try {
     await connectMongoDB();
     const code = formData.get("code") as string;
-    const checkValidity = await checkCodeExistence(code);
+    const checkValidity = await checkVerificationCodeExistence(code);
     if (checkValidity) {
-      return { code, error: "great" };
+      const email = checkValidity.email;
+      const retrieveUsername = await retrieveAdminUsernameByEmail(email);
+      createSession(retrieveUsername);
+      redirect("/");
     } else {
       return { code, error: "Access Denied" };
     }
@@ -25,11 +34,23 @@ export const validatePassword = async (
   }
 };
 
-const checkCodeExistence = async (Code: string) => {
+const checkVerificationCodeExistence = async (Code: string) => {
   try {
-    const code = await allowedEmailModel.findOne({ code: Code });
+    const code = await verificationCodeModel.findOne({
+      code: Code,
+    });
+    console.log("code");
     return code;
-  } catch (error) {
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+const retrieveAdminUsernameByEmail = async (email: string) => {
+  try {
+    const username = await adminModel.findOne({ email: email });
+    return username;
+  } catch (error: unknown) {
     throw error;
   }
 };

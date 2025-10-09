@@ -4,6 +4,12 @@ export interface AllowedEmailInterface {
   email: string;
 }
 
+export interface VerificationCodeInterface {
+  email: string;
+  code: string;
+  datecreated?: Date;
+}
+
 export interface AdministratorInterface {
   id: string;
   email: string;
@@ -86,6 +92,12 @@ export interface SubscriberInterface {
 
 const allowedEmailsSchema = new Schema<AllowedEmailInterface>({
   email: { type: String, required: true, unique: true },
+});
+
+const verficationCodeSchema = new Schema<VerificationCodeInterface>({
+  email: { type: String, required: true, unique: true },
+  code: { type: String, required: true, unique: true },
+  datecreated: { type: Date, required: true, expires: 30, default: new Date() },
 });
 
 const administratorSchema = new Schema<AdministratorInterface>({
@@ -376,6 +388,10 @@ const allowedEmailModel =
   models.AllowedEmail ||
   model<AllowedEmailInterface>("AllowedEmail", allowedEmailsSchema);
 
+const verificationCodeModel =
+  models.VerificationCode ||
+  model<VerificationCodeInterface>("VerificationCode", verficationCodeSchema);
+
 const adminModel =
   models.Administrator ||
   model<AdministratorInterface>("Administrator", administratorSchema);
@@ -399,6 +415,7 @@ const subscribersModel =
 
 export {
   allowedEmailModel,
+  verificationCodeModel,
   adminModel,
   categoryModel,
   jobModel,

@@ -1,16 +1,27 @@
-import "server-only";
+"use server";
 import { SignJWT, jwtVerify } from "jose";
 import { checkEnvExistence } from "./helpers";
+import { cookies } from "next/headers";
 
 const secretKey = checkEnvExistence("JWT_SECRET");
 const encodedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayLoad = {
-  userId: string;
+  username: string;
   expiresAt: Date;
 };
 
-export const encrypt = (payload: SessionPayLoad) => {
+export const createSession = async (username: string) => {
+  const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+  const session = await encrypt({ username, expiresAt });
+  (await cookies()).set("session", session, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+  });
+};
+
+export const encrypt = async (payload: SessionPayLoad) => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()

@@ -1,7 +1,11 @@
 "use server";
 import { connectMongoDB } from "@/lib/mongodb";
 import { sendValidationCode } from "@/lib/sendMail";
-import { allowedEmailModel } from "@/schema/mongoSchema";
+import {
+  allowedEmailModel,
+  VerificationCodeInterface,
+  verificationCodeModel,
+} from "@/schema/mongoSchema";
 import { nanoid } from "nanoid";
 
 interface signInInterface {
@@ -19,7 +23,9 @@ export const signIn = async (
     const checkValidity = await checkEmailExistence(email);
     if (checkValidity) {
       const code = nanoid(8);
-      const sendCode = await sendValidationCode(email, code);
+      await sendValidationCode(email, code);
+      const details: VerificationCodeInterface = { email, code };
+      await verificationEmailandCodeToDatabase(details);
       return { email, error: "", access: true };
     } else {
       return { email, error: "Access Denied", access: false };
@@ -35,6 +41,16 @@ const checkEmailExistence = async (Email: string) => {
     const email = await allowedEmailModel.findOne({ email: Email });
     return email;
   } catch (error) {
+    throw error;
+  }
+};
+
+const verificationEmailandCodeToDatabase = async (
+  details: VerificationCodeInterface
+) => {
+  try {
+    await verificationCodeModel.create(details);
+  } catch (error: unknown) {
     throw error;
   }
 };

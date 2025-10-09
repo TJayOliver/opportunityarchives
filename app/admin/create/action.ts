@@ -14,8 +14,6 @@ interface createAdminInterface {
   error: string;
 }
 
-const emails = ["tjoliver1@yahoo.com", "tjayoliver99@gmail.com"];
-
 export const createAdmin = async (
   prevState: createAdminInterface | undefined,
   formData: FormData
@@ -44,7 +42,7 @@ export const createAdmin = async (
       image,
     };
     await adminToDatabase(details);
-    return { username, email, error: "" };
+    return { username: "", email: "", error: "Successfully Created" };
   } catch (error: unknown) {
     console.error("Create Admin", error);
     return { username: "", email: "", error: "Internal Server Error" };
