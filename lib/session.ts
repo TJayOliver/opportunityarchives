@@ -22,6 +22,11 @@ export const createSession = async (username: string) => {
   });
 };
 
+export const deleteSession = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+};
+
 export const encrypt = async (payload: SessionPayLoad) => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })

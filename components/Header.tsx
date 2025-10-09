@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-const Header = ({ toggleSubscribe }: { toggleSubscribe: () => void }) => {
+export const Header = ({
+  toggleSubscribe,
+}: {
+  toggleSubscribe: () => void;
+}) => {
   const [activateConfetti, setConfetti] = useState(false);
   const triggerConfetti = () => {
     setConfetti(true);
@@ -52,5 +56,3 @@ const Header = ({ toggleSubscribe }: { toggleSubscribe: () => void }) => {
     </section>
   );
 };
-
-export default Header;
