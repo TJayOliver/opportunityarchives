@@ -97,7 +97,12 @@ const allowedEmailsSchema = new Schema<AllowedEmailInterface>({
 const verficationCodeSchema = new Schema<VerificationCodeInterface>({
   email: { type: String, required: true, unique: true },
   code: { type: String, required: true, unique: true },
-  datecreated: { type: Date, required: true, expires: 30, default: new Date() },
+  datecreated: {
+    type: Date,
+    required: true,
+    expireAfterSeconds: 30,
+    default: new Date(),
+  },
 });
 
 const administratorSchema = new Schema<AdministratorInterface>({

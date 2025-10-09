@@ -14,7 +14,8 @@ type SessionPayLoad = {
 export const createSession = async (username: string) => {
   const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ username, expiresAt });
-  (await cookies()).set("session", session, {
+  const cookieStore = await cookies();
+  cookieStore.set("session", session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -36,6 +37,6 @@ export const decrypt = async (session: string | undefined = "") => {
     });
     return payload;
   } catch (error: unknown) {
-    console.error("Failed to verify session", error);
+    //console.error("Failed to verify session", error);
   }
 };

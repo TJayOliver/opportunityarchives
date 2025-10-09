@@ -1,14 +1,24 @@
 "use client";
+
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { validatePassword } from "./action";
+import { useRouter } from "next/navigation";
 
 export const ValidatePassword = () => {
+  const router = useRouter();
   const [state, action, isLoading] = useActionState(validatePassword, {
     code: "",
     error: "",
+    success: false,
   });
+  useEffect(() => {
+    if (state?.success) {
+      router.push("/");
+    }
+  }, [state, action]);
+
   return (
     <form action={action} className="flex flex-col gap-4 text-slate-800">
       {state?.error && (

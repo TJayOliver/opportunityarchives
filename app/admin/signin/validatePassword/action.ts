@@ -1,17 +1,14 @@
 "use server";
 import { connectMongoDB } from "@/lib/mongodb";
 import { createSession } from "@/lib/session";
-import {
-  allowedEmailModel,
-  verificationCodeModel,
-  adminModel,
-} from "@/schema/mongoSchema";
-import { redirect } from "next/navigation";
+import { verificationCodeModel, adminModel } from "@/schema/mongoSchema";
 
 interface ValidatePasswordInterface {
   code: string;
   error: string;
+  success: boolean;
 }
+
 export const validatePassword = async (
   prevState: ValidatePasswordInterface | undefined,
   formData: FormData
@@ -20,17 +17,16 @@ export const validatePassword = async (
     await connectMongoDB();
     const code = formData.get("code") as string;
     const checkValidity = await checkVerificationCodeExistence(code);
-    if (checkValidity) {
-      const email = checkValidity.email;
-      const retrieveUsername = await retrieveAdminUsernameByEmail(email);
-      createSession(retrieveUsername);
-      redirect("/");
-    } else {
-      return { code, error: "Access Denied" };
+    if (!checkValidity) {
+      return { code, error: "Access Denied", success: false };
     }
+    const email = checkValidity.email;
+    const retrieveUsername = await retrieveAdminUsernameByEmail(email);
+    await createSession(retrieveUsername);
+    return { code: "", error: "", success: true };
   } catch (error: unknown) {
     console.error("sign in", error);
-    return { code: "", error: "Internal Server Error" };
+    return { code: "", error: "Internal Server Error", success: false };
   }
 };
 
@@ -39,7 +35,6 @@ const checkVerificationCodeExistence = async (Code: string) => {
     const code = await verificationCodeModel.findOne({
       code: Code,
     });
-    console.log("code");
     return code;
   } catch (error: unknown) {
     throw error;
